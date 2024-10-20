@@ -1,0 +1,16 @@
+class Solution {
+    public Pair<Long, Long> getMinMax(int[] arr) {
+        long max = Long.MIN_VALUE;
+        long min = Long.MAX_VALUE;
+        
+        for(int x : arr){
+            if(x>max){
+                max=x;
+            }
+            if(x<min){
+                min=x;
+            }
+        }
+        return new Pair<>(min,max);
+    }
+}

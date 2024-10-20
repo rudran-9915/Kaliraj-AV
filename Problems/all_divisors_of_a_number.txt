@@ -1,0 +1,19 @@
+import java.util.*;
+
+
+public class Solution {
+    public static List<Integer> printDivisors(int n) {
+        List<Integer> Divisors = new ArrayList<>();
+        int sqrtN = (int)Math.sqrt(n);
+        for(int i=1;i<=sqrtN;i++){
+            if(n%i==0){
+                Divisors.add(i);
+                if(i!=n/i){
+                    Divisors.add(n/i);
+                }
+            }
+        }
+        Collections.sort(Divisors);
+        return Divisors;
+    }
+}

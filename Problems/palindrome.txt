@@ -1,0 +1,17 @@
+class Solution
+{
+    public String is_palindrome(int n)
+    {
+        int dup = n;
+        int rev = 0;
+        while(dup!=0){
+            int dig = dup%10;
+            rev = rev*10+dig;
+            dup=dup/10;
+        }
+        if(n==rev){
+            return "Yes";
+        }
+        return "No";
+    }
+}

@@ -1,0 +1,17 @@
+class Solution {
+    static String armstrongNumber(int n) {
+         int dup = n;
+         int res =0;
+         int len = String.valueOf(n).length();
+         while(dup!=0){
+             int dig=dup%10;
+             res +=Math.pow(dig,len);
+             dup=dup/10;
+         }
+         if(n==res){
+             return "true";
+         }
+         return "false";
+    }
+    
+}

@@ -1,0 +1,15 @@
+class Solution {
+    static int getLastDigit(String a, String b) {
+        BigInteger base = new BigInteger(a);
+        BigInteger exponent = new BigInteger(b);
+        BigInteger modulus = BigInteger.TEN; // Modulus 10 for getting the last digit
+        
+        // Calculate a^b mod 10
+        BigInteger result = base.modPow(exponent, modulus);
+        
+        // Extract the last digit
+        int lastDigit = result.intValue();
+        
+        return lastDigit;
+    }
+};

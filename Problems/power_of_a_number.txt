@@ -1,0 +1,28 @@
+class Solution
+{
+        
+    long power(int N,int R)
+    {
+        long ans = 1;
+        long dup = R;
+        if(dup<0){
+            dup*=-1;
+        }
+        while(dup>0){
+            if(dup%2==0){
+                N=N*N;
+                dup/=2;
+            }
+            else{
+                ans=ans*N;
+                dup-=1;
+            }
+        }
+        if(R<0){
+             ans = 1/ans;
+        }
+        return (long)ans;
+        
+    }
+
+}
