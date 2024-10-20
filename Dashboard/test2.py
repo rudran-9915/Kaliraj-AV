@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import json
+import numpy as np
+
+#with open('C:/Users/Admin/random_forest_model.pkl', 'rb') as f:
+   # model = pickle.load(f)
 
 with open('C:/Users/Admin/random_forest_model.pkl', 'rb') as f:
     model = pickle.load(f)
@@ -65,6 +69,9 @@ def create_product_preferences_df(df):
 df = pd.read_csv('shopping_behavior_updated.csv')
 
 # Create Age Group column
+
+df['Age Group'] = df['Age'].apply(lambda x: 'Young' if x <= 30 else ('Senior' if x > 51 else 'Middle-aged'))
+
 st.sidebar.header("Navigation")
 page = st.sidebar.selectbox("Select Page:", ["Customer Behavior Analysis", "Churn Prediction"])
 
@@ -332,7 +339,7 @@ elif page == "Churn Prediction":
 
     # Predict button
     if st.button("Predict Churn"):
-        # Prepare the input data for prediction
+    # Prepare the input data for prediction
         input_data = {
             'Age': age,
             'Gender': gender.lower().replace(' ', '_'),
@@ -352,19 +359,45 @@ elif page == "Churn Prediction":
             'Payment Method': payment_method.lower().replace(' ', '_'),
             'Frequency of Purchases': frequency_of_purchases.lower().replace(' ', '_')
         }
+        if any(value == "" for key, value in input_data.items() if key not in ['Purchase Amount', 'Previous Purchases']):
+            st.error("Please fill in all required fields.")
+        else:   
+            st.write(f"Model type: {type(model)}")
 
-        # One-hot encode the categorical variables
-        input_array = np.zeros(len(data_columns))
-        for i, col in enumerate(data_columns):
-            if col in input_data:
-                input_array[i] = input_data[col]
-            elif col in input_data.keys():
-                if f"{col}_{input_data[col]}" in data_columns:
-                    input_array[data_columns.index(f"{col}_{input_data[col]}")] = 1
+            if hasattr(model, 'predict_proba'):
+        # Prepare the input data for prediction
+                input_array = np.zeros(len(data_columns))
+                for i, col in enumerate(data_columns):
+                    if col in input_data:
+                        input_array[i] = input_data[col]
+                    elif col in input_data.keys():
+                        if f"{col}_{input_data[col]}" in data_columns:
+                            input_array[data_columns.index(f"{col}_{input_data[col]}")] = 1
 
         # Get the prediction probability
-        output_probab = model.predict_proba([input_array])[0][1]
-        pred = "Churn" if output_probab > 0.4 else "Not Churn"
+                output_probab = model.predict_proba([input_array])[0][1]
+                pred = "Churn" if output_probab > 0.4 else "Not Churn"
 
         # Display the result
-        st.success(f"Prediction: {pred} (Probability: {output_probab:.4f})")
+                st.success(f"Prediction: {pred} (Probability: {output_probab:.4f})")
+            else:
+                st.error("Loaded model does not support probability predictions.")
+
+        
+        
+        
+        # One-hot encode the categorical variables
+        # input_array = np.zeros(len(data_columns))
+        # for i, col in enumerate(data_columns):
+        #     if col in input_data:
+        #         input_array[i] = input_data[col]
+        #     elif col in input_data.keys():
+        #         if f"{col}_{input_data[col]}" in data_columns:
+        #             input_array[data_columns.index(f"{col}_{input_data[col]}")] = 1
+
+        # # Get the prediction probability
+        # output_probab = model.predict_proba([input_array])[0][1]
+        # pred = "Churn" if output_probab > 0.4 else "Not Churn"
+
+        # # Display the result
+        # st.success(f"Prediction: {pred} (Probability: {output_probab:.4f})")
